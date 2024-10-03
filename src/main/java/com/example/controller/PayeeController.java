@@ -1,9 +1,20 @@
 package com.example.controller;
 
+import java.util.Optional;
+
 import com.example.model.Payee;
 import com.example.service.PayeeService;
+
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.*;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Delete;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Put;
+import jakarta.validation.Valid;
 
 @Controller("/payees")
 public class PayeeController {
@@ -15,8 +26,20 @@ public class PayeeController {
     }
 
     @Post
-    public HttpResponse<Payee> addPayee(@Body Payee payee) {
-        return HttpResponse.created(payeeService.addPayee(payee));
+    public HttpResponse<Payee> createPayee(@Body @Valid Payee payee) {
+        return HttpResponse.status(HttpStatus.CREATED).body(payeeService.createPayee(payee));
+    }
+
+    @Get("/{payeeId}")
+    public HttpResponse<Payee> getPayee(@PathVariable Long payeeId) {
+        Optional<Payee> payee = payeeService.getPayeeById(payeeId);
+        return payee.map(HttpResponse::ok)
+                .orElse(HttpResponse.notFound());
+    }
+
+    @Get
+    public Iterable<Payee> getAllPayees() {
+        return payeeService.getAllPayees();
     }
 
     @Put("/{payeeId}")
@@ -31,12 +54,4 @@ public class PayeeController {
         payeeService.deletePayee(payeeId);
         return HttpResponse.noContent();
     }
-
-    @Get("/{payeeId}")
-    public HttpResponse<Payee> getPayeeById(@PathVariable Long payeeId) {
-        return payeeService.getPayeeById(payeeId)
-                .map(HttpResponse::ok)
-                .orElse(HttpResponse.notFound());
-    }
 }
-

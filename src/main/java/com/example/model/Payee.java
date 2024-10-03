@@ -1,72 +1,73 @@
 package com.example.model;
 
-import io.micronaut.data.annotation.GeneratedValue;
-import io.micronaut.data.annotation.MappedEntity;
-import io.micronaut.data.model.naming.NamingStrategies;
+import io.micronaut.core.annotation.Introspected;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
-
-@MappedEntity(value = "payees", namingStrategy = NamingStrategies.UnderScoreSeparatedLowerCase.class)
+@Introspected
+@Entity
+@Table(name = "payees")
 public class Payee {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String payeeName;
-    private String accountNumber;
-    private String address;
+	@NotBlank
+	private String payeeName;
 
-    public Payee(Long id, String payeeName, String accountNumber, String address) {
-        this.id = id;
-        this.payeeName = payeeName;
-        this.accountNumber = accountNumber;
-        this.address = address;
-    }
+	@NotBlank
+	private String accountNumber;
 
-    public Payee() {
-    }
+	@NotBlank
+	private String address;
 
-    public Long getId() {
-        return id;
-    }
+	public Payee() {
+		super();
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Payee(Long id, @NotBlank String payeeName, @NotBlank String accountNumber, @NotBlank String address) {
+		super();
+		this.id = id;
+		this.payeeName = payeeName;
+		this.accountNumber = accountNumber;
+		this.address = address;
+	}
 
-    public String getPayeeName() {
-        return payeeName;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setPayeeName(String payeeName) {
-        this.payeeName = payeeName;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
+	public String getPayeeName() {
+		return payeeName;
+	}
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
+	public void setPayeeName(String payeeName) {
+		this.payeeName = payeeName;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public String getAccountNumber() {
+		return accountNumber;
+	}
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
 
-    @Override
-    public String toString() {
-        return "Payee{" +
-                "id=" + id +
-                ", payeeName='" + payeeName + '\'' +
-                ", accountNumber='" + accountNumber + '\'' +
-                ", address='" + address + '\'' +
-                '}';
-    }
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 }
-
